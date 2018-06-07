@@ -36,8 +36,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         PortalUser portalUser = portalUserRepository.findByPortalUserLogin(username);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        if(portalUser != null)
         for (Role role : portalUser.getRoles()){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        else{
+            throw new UsernameNotFoundException(username + " is not found");
         }
 
         return new User(portalUser.getPortalUserLogin(), portalUser.getPortalUserPassword(), grantedAuthorities);

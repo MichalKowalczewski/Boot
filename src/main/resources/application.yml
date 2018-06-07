@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://MC0Y8V3C\\169.254.154.125:1433;databaseName=Spring;integratedSecurity=true
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      dll-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  messages:
+    basename: validation
+
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+
+

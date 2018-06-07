@@ -29,11 +29,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+
         roleService.initialize();
 
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/register").permitAll()
+                .antMatchers(
+                        "/",
+                        "/js/**",
+                        "/css/**",
+                        "/img/**",
+                        "/webjars/**",
+                        "/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
