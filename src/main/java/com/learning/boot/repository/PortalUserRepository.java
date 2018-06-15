@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PortalUserRepository extends JpaRepository<PortalUser, Integer> {
     PortalUser findByPortalUserEmail(String email);
     PortalUser findByPortalUserLogin(String login);
+    PortalUser findByPortalUserID(int id);
 }

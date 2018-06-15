@@ -12,10 +12,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,32 +72,19 @@ public class PortalUserController {
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         PortalUser portalUser = portalUserService.findByLogin(user.getUsername());
-        int id = portalUser.getPortalUserID();
-        String login = portalUser.getPortalUserLogin();
-        String firstName = portalUser.getPortalUserFirstName();
-        String lastName = portalUser.getPortalUserLastName();
-        String email = portalUser.getPortalUserEmail();
-
-        model.addAttribute("id", id);
-        model.addAttribute("login", login);
-        model.addAttribute("firstName", firstName);
-        model.addAttribute("lastName", lastName);
-        model.addAttribute("email", email);
+        model.addAttribute("portalUser", portalUser);
         return "details";
     }
 
     @RequestMapping(value = "/details", method = RequestMethod.POST)
-    public String update(@ModelAttribute("portalUser") PortalUser user, BindingResult bindingResult, Model model) {
-        System.out.println("sprawdzam wartość" + user.getPortalUserID());
+    public String update(@ModelAttribute(value = "portalUser") PortalUser portalUser, BindingResult bindingResult, Model model) {
 
-        portalUserValidator.validate(user, bindingResult);
+        PortalUser portalUserTemp = portalUserService.findById(portalUser.getPortalUserID());
+        portalUserTemp.setPortalUserEmail(portalUser.getPortalUserEmail());
 
-        if (bindingResult.hasErrors()) {
-            return "details";
-        }
+        portalUserService.update(portalUserTemp);
 
-        portalUserService.save(user);
-
+        model.addAttribute("portalUser", portalUserTemp);
 
         return "details";
     }

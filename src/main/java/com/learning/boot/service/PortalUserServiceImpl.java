@@ -33,9 +33,19 @@ public class PortalUserServiceImpl implements PortalUserService {
         portalUserRepository.save(portalUser);
     }
 
+    @Override
+    public void update(PortalUser portalUser){
+        portalUserRepository.save(portalUser);
+    }
+
 
     @Override
     public PortalUser findByLogin(String username) {
         return portalUserRepository.findByPortalUserLogin(username);
+    }
+
+    @Override
+    public PortalUser findById(int id) {
+        return portalUserRepository.findByPortalUserID(id);
     }
 }

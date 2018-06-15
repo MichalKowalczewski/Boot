@@ -21,9 +21,33 @@ public class PortalUserValidator implements Validator {
         return PortalUser.class.equals(aClass);
     }
 
+
+    public void simpleValidate(Object o, Errors errors){
+        PortalUser portalUser = (PortalUser) o;
+
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserEmail", "Email cannot be empty");
+        if(!isEmailValid(portalUser.getPortalUserEmail())){
+            errors.rejectValue("portalUserEmail", "Invalid.newUser.PortalUserEmail");
+        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserFirstName", "First Name cannot be empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserLastName", "Last Name cannot be empty");
+    }
+
     @Override
     public void validate(Object o, Errors errors) {
         PortalUser portalUser = (PortalUser) o;
+
+        simpleValidate(o, errors);
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserPassword", "Password cannot be empty");
+        if(portalUser.getPortalUserPassword().length() < 4 || portalUser.getPortalUserPassword().length() > 32){
+            errors.rejectValue("portalUserPassword", "Size.newUser.portalUserPassword");
+        }
+
+        if(!portalUser.getPortalUserPasswordConfirm().equals(portalUser.getPortalUserPassword())){
+            errors.rejectValue("portalUserPasswordConfirm", "Diff.newUser.PortalUserPasswordConfirm");
+        }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserLogin", "NotEmpty");
         if(portalUser.getPortalUserLogin().length() < 4 || portalUser.getPortalUserLogin().length() > 32){
@@ -33,20 +57,8 @@ public class PortalUserValidator implements Validator {
             errors.rejectValue("portalUserLogin", "Duplicate.newUser.portalUserName");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserPassword", "Password cannot be empty");
-        if(portalUser.getPortalUserPassword().length() < 4 || portalUser.getPortalUserPassword().length() > 32){
-            errors.rejectValue("portalUserPassword", "Size.newUser.portalUserPassword");
-        }
-        if(!portalUser.getPortalUserPasswordConfirm().equals(portalUser.getPortalUserPassword())){
-            errors.rejectValue("portalUserPasswordConfirm", "Diff.newUser.PortalUserPasswordConfirm");
-        }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserEmail", "Email cannot be empty");
-        if(!isEmailValid(portalUser.getPortalUserEmail())){
-            errors.rejectValue("portalUserEmail", "Invalid.newUser.PortalUserEmail");
-        }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserFirstName", "First Name cannot be empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "portalUserLastName", "Last Name cannot be empty");
     }
+
 
     public boolean isEmailValid(String email){
         try {
